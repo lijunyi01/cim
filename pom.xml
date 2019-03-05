@@ -93,6 +93,7 @@
 				<version>1.2.31</version>
 			</dependency>
 
+			<!--本地缓存-->
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
