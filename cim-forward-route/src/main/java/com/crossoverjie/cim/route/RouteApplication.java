@@ -23,7 +23,7 @@ public class RouteApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		//监听服务
+		//监听服务(监听zookeeper,以便/route节点下服务信息发生变化时获得主动的通知)
 		Thread thread = new Thread(new ServerListListener());
 		thread.setName("zk-listener");
 		thread.start() ;
