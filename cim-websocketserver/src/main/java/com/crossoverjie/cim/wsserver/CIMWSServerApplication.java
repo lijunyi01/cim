@@ -39,8 +39,8 @@ public class CIMWSServerApplication implements CommandLineRunner{
 		//获得本机IP; 这种方法只能处理简单网络情况（单一网卡）
 //		String addr = InetAddress.getLocalHost().getHostAddress();
 		String addr = getLocalHostLANAddress().getHostAddress();
-		// 启动线程注册到zookeeper（报告自己的ip、tcp/http端口信息）
-		Thread thread = new Thread(new RegistryZK(addr, appConfiguration.getCimServerPort(),httpPort));
+		// 启动线程注册到zookeeper（报告自己的ip、tcp/http端口信息,由于是websocket，因此没有单独的tcp端口）
+		Thread thread = new Thread(new RegistryZK(addr,0,httpPort));
 		thread.setName("registry-zk");
 		thread.start() ;
 	}
