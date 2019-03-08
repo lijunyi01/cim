@@ -1,4 +1,4 @@
-package com.crossoverjie.cim.wsserver.model.websocket;
+package com.crossoverjie.cim.wsserver.model;
 
 import java.util.Date;
 

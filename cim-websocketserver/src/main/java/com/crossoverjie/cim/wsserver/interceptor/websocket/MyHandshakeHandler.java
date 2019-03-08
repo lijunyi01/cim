@@ -1,7 +1,7 @@
 package com.crossoverjie.cim.wsserver.interceptor.websocket;
 
 import com.crossoverjie.cim.wsserver.common.Constants;
-import com.crossoverjie.cim.wsserver.model.websocket.User;
+import com.crossoverjie.cim.wsserver.model.User;
 import com.crossoverjie.cim.wsserver.util.SpringContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

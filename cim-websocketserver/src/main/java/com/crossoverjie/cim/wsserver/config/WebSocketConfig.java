@@ -3,6 +3,7 @@ package com.crossoverjie.cim.wsserver.config;
 import com.crossoverjie.cim.wsserver.interceptor.websocket.AuthHandshakeInterceptor;
 import com.crossoverjie.cim.wsserver.interceptor.websocket.MyChannelInterceptor;
 import com.crossoverjie.cim.wsserver.interceptor.websocket.MyHandshakeHandler;
+import com.crossoverjie.cim.wsserver.interceptor.websocket.WebSocketErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -28,15 +29,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private MyHandshakeHandler myHandshakeHandler;
 
     @Autowired
+    private WebSocketErrorHandler webSocketErrorHandler;
+
+    @Autowired
     private MyChannelInterceptor myChannelInterceptor;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp-websocket").withSockJS();
+        registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/stomp-websocket").setAllowedOrigins("*").withSockJS();
 
-        registry.addEndpoint("/chat-websocket")
+        registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/chat-websocket")
                 .addInterceptors(authHandshakeInterceptor)
                 .setHandshakeHandler(myHandshakeHandler)
+                .setAllowedOrigins("*")
                 .withSockJS();
     }
 
