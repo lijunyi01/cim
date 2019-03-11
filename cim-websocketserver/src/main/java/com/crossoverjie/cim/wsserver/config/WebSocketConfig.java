@@ -36,13 +36,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/stomp-websocket").setAllowedOrigins("*").withSockJS();
+        // 是否要用.withSockJS()取决于客户端，要和客户端保持一致
+        registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/stomp-websocket").setAllowedOrigins("*");
+        //registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/stomp-websocket").setAllowedOrigins("*").withSockJS();
 
         registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/chat-websocket")
                 .addInterceptors(authHandshakeInterceptor)
                 .setHandshakeHandler(myHandshakeHandler)
-                .setAllowedOrigins("*")
-                .withSockJS();
+                .setAllowedOrigins("*");
+//        registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/chat-websocket")
+//                .addInterceptors(authHandshakeInterceptor)
+//                .setHandshakeHandler(myHandshakeHandler)
+//                .setAllowedOrigins("*")
+//                .withSockJS();
     }
 
     @Override
