@@ -42,7 +42,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/chat-websocket")
                 .addInterceptors(authHandshakeInterceptor)
-                .setHandshakeHandler(myHandshakeHandler)
+//                .setHandshakeHandler(myHandshakeHandler)
                 .setAllowedOrigins("*");
 //        registry.setErrorHandler(webSocketErrorHandler).addEndpoint("/chat-websocket")
 //                .addInterceptors(authHandshakeInterceptor)
