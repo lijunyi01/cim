@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
@@ -59,14 +60,25 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+
+        // 自定义调度器，用于控制心跳线程
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        // 线程池线程数，心跳连接断开线程
+        taskScheduler.setPoolSize(1);
+        // 线程名前缀
+        taskScheduler.setThreadNamePrefix("websocket-heartbeat-thread-");
+        // 初始化
+        taskScheduler.initialize();
+
         // 客户端需要把消息发送到/message/xxx地址； 表示所有以/message 开头的客户端消息或请求
         // 都会路由到带有@MessageMapping 注解的方法中
         registry.setApplicationDestinationPrefixes("/message");
         // 给指定用户发送消息的路径前缀，默认值是/user/
         registry.setUserDestinationPrefix("/user/");
         //服务端广播/单播消息的路径前缀，客户端需要相应订阅/topic/yyy这个地址的消息
-        registry.enableSimpleBroker("/topic","/user");
-               // .setHeartbeatValue(new long[]{10000,10000});    // 设置心跳，第一值表示server最小能保证发的心跳间隔毫秒数, 第二个值代码server希望client发的心跳间隔毫秒数
+        registry.enableSimpleBroker("/topic","/user")
+               .setHeartbeatValue(new long[]{10000,10000})  // 设置心跳，第一值表示server最小能保证发的心跳间隔毫秒数, 第二个值代码server希望client发的心跳间隔毫秒数
+               .setTaskScheduler(taskScheduler);
     }
 
     /**
