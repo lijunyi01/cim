@@ -8,9 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
+import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
 /**
  * WebSocket相关配置
@@ -53,12 +59,53 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        //客户端需要把消息发送到/message/xxx地址
+        // 客户端需要把消息发送到/message/xxx地址； 表示所有以/message 开头的客户端消息或请求
+        // 都会路由到带有@MessageMapping 注解的方法中
         registry.setApplicationDestinationPrefixes("/message");
-        //给指定用户发送消息的路径前缀，默认值是/user/
+        // 给指定用户发送消息的路径前缀，默认值是/user/
         registry.setUserDestinationPrefix("/user/");
         //服务端广播/单播消息的路径前缀，客户端需要相应订阅/topic/yyy这个地址的消息
         registry.enableSimpleBroker("/topic","/user");
+               // .setHeartbeatValue(new long[]{10000,10000});    // 设置心跳，第一值表示server最小能保证发的心跳间隔毫秒数, 第二个值代码server希望client发的心跳间隔毫秒数
+    }
+
+    /**
+     * 配置发送与接收的消息参数，可以指定消息字节大小，缓存大小，发送超时时间
+     * @param registration
+     */
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        /*
+         * 1. setMessageSizeLimit 设置消息缓存的字节数大小 字节
+         * 2. setSendBufferSizeLimit 设置websocket会话时，缓存的大小 字节
+         * 3. setSendTimeLimit 设置消息发送会话超时时间，毫秒
+         */
+        registration.setMessageSizeLimit(10240)
+                .setSendBufferSizeLimit(10240)
+                .setSendTimeLimit(10000);
+
+//        registration.addDecoratorFactory(new WebSocketHandlerDecoratorFactory() {
+//            @Override
+//            public WebSocketHandler decorate(final WebSocketHandler handler) {
+//                return new WebSocketHandlerDecorator(handler) {
+//                    @Override
+//                    public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
+//                        // 客户端与服务器端建立连接后，此处记录谁上线了
+//                        //String username = session.getPrincipal().getName();
+//                        //log.info("online: " + username);
+//                        super.afterConnectionEstablished(session);
+//                    }
+//
+//                    @Override
+//                    public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+//                        // 客户端与服务器端断开连接后，此处记录谁下线了
+//                        //String username = session.getPrincipal().getName();
+//                        //log.info("offline: " + username);
+//                        super.afterConnectionClosed(session, closeStatus);
+//                    }
+//                };
+//            }
+//        });
     }
 
     @Override

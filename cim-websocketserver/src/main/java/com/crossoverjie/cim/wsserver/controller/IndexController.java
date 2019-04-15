@@ -79,7 +79,11 @@ public class IndexController {
 
         if (userService.isUserOnLine(destUserId)){
             // 对应的客户端代码：client.subscribe("/user/" + userId + "/msg", onMessage);
-            template.convertAndSendToUser(destUserId + "","/msg",msg);
+            try {
+                template.convertAndSendToUser(destUserId + "", "/msg", msg);
+            }catch (Exception e){
+                return "发送失败";
+            }
             return "发送成功";
         }else {
 
