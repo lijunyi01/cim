@@ -1,3 +1,8 @@
+package com.crossoverjie.cim.wsserver.service.impl;
+
+import com.crossoverjie.cim.wsserver.service.UserService;
+import org.springframework.stereotype.Service;
+
 //package com.crossoverjie.cim.wsserver.service.impl;
 //
 //import com.crossoverjie.cim.wsserver.model.User;
@@ -19,8 +24,8 @@
 // * @date 2018/8/3
 // * @since 1.0.0
 // */
-//@Service("userServiceImpl")
-//public class UserServiceImpl implements UserService {
+@Service("userServiceImpl")
+public class UserServiceImpl implements UserService {
 //    private final Logger logger = LoggerFactory.getLogger(getClass());
 //
 //    @Autowired
@@ -85,5 +90,11 @@
 ////            }
 ////        }
 //    }
-//
-//}
+
+    @Override
+    public boolean isUserOnLine(String userId){
+        boolean ret = false;
+        ret = true;
+        return ret;
+    }
+}

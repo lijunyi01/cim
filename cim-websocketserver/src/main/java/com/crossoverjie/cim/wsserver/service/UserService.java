@@ -19,7 +19,7 @@ public interface UserService {
      * @param userId 用户ID
      * @return cn.zifangsky.model.User
      */
-    User selectByUserId(Integer userId);
+//    User selectByUserId(Integer userId);
 
     /**
      * 注册
@@ -29,7 +29,7 @@ public interface UserService {
      * @param user 用户详情
      * @return boolean
      */
-    boolean register(User user);
+//    boolean register(User user);
 
     /**
      * 登录校验
@@ -40,7 +40,7 @@ public interface UserService {
      * @param password 密码
      * @return java.util.Map<java.lang.String,java.lang.Object>
      */
-    Map<String,Object> checkLogin(String username, String password);
+//    Map<String,Object> checkLogin(String username, String password);
 
     /**
      * 给用户添加角色信息
@@ -50,6 +50,8 @@ public interface UserService {
      * @param userId 用户ID
      * @param roleName 角色名
      */
-    void addUserRole(Integer userId, String roleName);
+//    void addUserRole(Integer userId, String roleName);
+
+    boolean isUserOnLine(String userId);
 
 }
